@@ -1,0 +1,7 @@
+goget_upx: false
+goget_cgo_enabled: true
+goget_goarm: "{{ ansible_env['GOARM'] | default('') }}"
+goget_goarch: "{{ ansible_env['GOARCH'] | default('') }}"
+goget_gopath: "{{ ansible_env['GOPATH'] | default('/go') }}"
+goget_uninstall: false
+goget_app: ""

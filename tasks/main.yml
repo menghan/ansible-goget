@@ -1,0 +1,55 @@
+---
+
+- name: install
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - git
+  - golang-go
+
+- name: decide whether upx
+  set_fact:
+    use_upx: true
+  when:
+  - ansible_machine == "x86_64"
+  - goget_goarch == ""
+  - goget_upx|bool
+
+- name: install upx
+  apt:
+    name: upx-ucl
+    state: present
+  when: use_upx is defined
+
+- name: "build {{ goget_app }}"
+  command: "go get -ldflags '-s' {{ goget_app }}"
+  environment:
+    CGO_ENABLED: "{{ goget_cgo_enabled }}"
+    GOPATH: "{{ goget_gopath }}"
+    GOARM: "{{ goget_goarm }}"
+    GOARCH: "{{ goget_goarch }}"
+
+- name: upx binary
+  command: "upx {{ goget_gopath }}/bin/{{ goget_app | basename }}"
+  when: use_upx is defined
+
+- name: uninstall
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - git
+  - golang-go
+  when:
+  - goget_uninstall
+
+- name: uninstall upx
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - upx-ucl
+  when:
+  - use_upx is defined
+  - goget_uninstall
