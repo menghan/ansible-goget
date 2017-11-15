@@ -6,7 +6,34 @@
     state: present
   with_items:
   - git
-  - golang-go
+  - tar
+  - gzip
+
+- name: set golang download url and checksum
+  set_fact:
+    url: https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz
+    checksum: sha256:de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b
+  when:
+  - ansible_machine == "x86_64"
+
+- name: set golang download url and checksum
+  set_fact:
+    url: https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-armv6l.tar.gz
+    checksum: sha256:8a6758c8d390e28ef2bcea511f62dcb43056f38c1addc06a8bc996741987e7bb
+  when:
+  - ansible_machine == "aarch64"
+
+- name: download latest golang
+  get_url:
+    dest: /usr/local/src
+    url: "{{ url }}"
+    checksum: "{{ checksum }}"
+  register: dl
+
+- name: extract go
+  command: "tar xf {{ dl.dest }}"
+  args:
+    chdir: /usr/local
 
 - name: decide whether upx
   set_fact:
@@ -23,7 +50,7 @@
   when: use_upx is defined
 
 - name: "build {{ goget_app }}"
-  command: "go get -ldflags '-s' {{ goget_app }}"
+  command: "/usr/local/go/bin/go get -ldflags '-s' {{ goget_app }}"
   environment:
     CGO_ENABLED: "{{ goget_cgo_enabled }}"
     GOPATH: "{{ goget_gopath }}"
