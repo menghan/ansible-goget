@@ -49,8 +49,18 @@
     state: present
   when: use_upx is defined
 
+- name: decide go get command if can strip
+  set_fact:
+    goget_command: "/usr/local/go/bin/go get -ldflags '-s' {{ goget_app }}"
+  when: goget_strip
+
+- name: decide go get command if cannot strip
+  set_fact:
+    goget_command: "/usr/local/go/bin/go get {{ goget_app }}"
+  when: not goget_strip
+
 - name: "build {{ goget_app }}"
-  command: "/usr/local/go/bin/go get -ldflags '-s' {{ goget_app }}"
+  command: "{{ goget_command }}"
   environment:
     CGO_ENABLED: "{{ goget_cgo_enabled }}"
     GOPATH: "{{ goget_gopath }}"

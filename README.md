@@ -1,6 +1,8 @@
 goget
 =====
 
+Compile a golang static linked binary mainly for docker environment.
+
 run goget on:
 
 * Ubuntu 14.04+

@@ -1,4 +1,5 @@
 goget_upx: false
+goget_strip: false
 goget_cgo_enabled: 0
 goget_goarm: "{{ ansible_env['GOARM'] | default('') }}"
 goget_goarch: "{{ ansible_env['GOARCH'] | default('') }}"
