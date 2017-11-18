@@ -15,6 +15,7 @@
     checksum: sha256:de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b
   when:
   - ansible_machine == "x86_64"
+  - not goget_use_apt_golang
 
 - name: set golang download url and checksum
   set_fact:
@@ -22,6 +23,7 @@
     checksum: sha256:8a6758c8d390e28ef2bcea511f62dcb43056f38c1addc06a8bc996741987e7bb
   when:
   - ansible_machine == "aarch64"
+  - not goget_use_apt_golang
 
 - name: download latest golang
   get_url:
@@ -29,11 +31,19 @@
     url: "{{ url }}"
     checksum: "{{ checksum }}"
   register: dl
+  when: not goget_use_apt_golang
 
 - name: extract go
   command: "tar xf {{ dl.dest }}"
   args:
     chdir: /usr/local
+  when: not goget_use_apt_golang
+
+- name: apt install golang
+  apt:
+    name: golang-go
+    state: present
+  when: goget_use_apt_golang
 
 - name: decide whether upx
   set_fact:
@@ -78,6 +88,8 @@
   with_items:
   - git
   - golang-go
+  - tar
+  - gzip
   when:
   - goget_uninstall
 

@@ -6,3 +6,4 @@ goget_goarch: "{{ ansible_env['GOARCH'] | default('') }}"
 goget_gopath: "{{ ansible_env['GOPATH'] | default('/go') }}"
 goget_uninstall: false
 goget_app: ""
+goget_use_apt_golang: false
