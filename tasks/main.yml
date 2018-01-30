@@ -11,16 +11,16 @@
 
 - name: set golang download url and checksum
   set_fact:
-    url: https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz
-    checksum: sha256:de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b
+    url: https://dl.google.com/go/go1.9.3.linux-amd64.tar.gz
+    checksum: sha256:a4da5f4c07dfda8194c4621611aeb7ceaab98af0b38bfb29e1be2ebb04c3556c
   when:
   - ansible_machine == "x86_64"
   - not goget_use_apt_golang
 
 - name: set golang download url and checksum
   set_fact:
-    url: https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-armv6l.tar.gz
-    checksum: sha256:8a6758c8d390e28ef2bcea511f62dcb43056f38c1addc06a8bc996741987e7bb
+    url: https://dl.google.com/go/go1.9.3.linux-armv6l.tar.gz
+    checksum: sha256:926d6cd6c21ef3419dca2e5da8d4b74b99592ab1feb5a62a4da244e6333189d2
   when:
   - ansible_machine == "aarch64"
   - not goget_use_apt_golang
