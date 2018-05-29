@@ -11,8 +11,8 @@
 
 - name: set golang download url and checksum
   set_fact:
-    url: https://dl.google.com/go/go1.9.3.linux-amd64.tar.gz
-    checksum: sha256:a4da5f4c07dfda8194c4621611aeb7ceaab98af0b38bfb29e1be2ebb04c3556c
+    url: https://dl.google.com/go/go1.10.2.linux-amd64.tar.gz
+    checksum: sha256:4b677d698c65370afa33757b6954ade60347aaca310ea92a63ed717d7cb0c2ff
   when:
   - ansible_machine == "x86_64"
   - not goget_use_apt_golang
